@@ -1,0 +1,14 @@
+#!/bin/bash
+
+set -eo pipefail
+
+# Execute the original S2I assemble script.
+
+${WARPDRIVE_APP_ROOT}/s2i/bin/assemble
+
+# Remove any 'pip' requirements file so not used again if image is in
+# turn used as an S2I builder.
+
+WARPDRIVE_PIP_PACKAGES=${WARPDRIVE_PIP_PACKAGES:-requirements.txt}
+
+rm -f ${WARPDRIVE_PIP_PACKAGES}
