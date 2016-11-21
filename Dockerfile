@@ -9,7 +9,7 @@ USER root
 
 RUN apt-get update && apt-get install -y libfreetype6 libfreetype6-dev \
     libpng++ libpng++-dev liblapack-dev libatlas-dev gfortran \
-    libav-tools && \
+    libav-tools libgeos-dev && \
     apt-get clean && \
     rm -r /var/lib/apt/lists/*
 
