@@ -19,6 +19,10 @@ RUN apt-get update && apt-get install -y libfreetype6 libfreetype6-dev \
 COPY s2i ${WARPDRIVE_APP_ROOT}/.s2i
 COPY run.sh ${WARPDRIVE_APP_ROOT}/run.sh
 
+COPY requirements.txt ${WARPDRIVE_SRC_ROOT}/requirements.txt
+
+RUN chown 1001:0 ${WARPDRIVE_SRC_ROOT}/requirements.txt
+
 LABEL io.k8s.description="S2I builder for Jupyter Notebooks (Python 3.5)." \
       io.k8s.display-name="Jupyter Notebook (Python 3.5)" \
       io.openshift.tags="builder,python,python35,jupyter"
@@ -29,9 +33,10 @@ LABEL io.k8s.description="S2I builder for Jupyter Notebooks (Python 3.5)." \
 
 USER 1001
 
-# Install module for Jupyter notebook and ipyparallel.
+# Install packages required for Jupyter notebook and ipyparallel.
 
-RUN pip install --no-cache-dir jupyter ipython[notebook] ipyparallel
+RUN warpdrive build && \
+    rm ${WARPDRIVE_SRC_ROOT}/requirements.txt
 
 # Expose ports needed when running a parallel compute cluster using the
 # ipyparallel module.
