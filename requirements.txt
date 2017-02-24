@@ -1,3 +1,4 @@
 jupyter
+jupyterhub
 ipython[notebook]
 ipyparallel
