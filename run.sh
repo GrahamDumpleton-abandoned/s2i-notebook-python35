@@ -124,14 +124,14 @@ fi
 
 JUPYTER_NOTEBOOK_DIR=${JUPYTER_NOTEBOOK_DIR:-${WARPDRIVE_SRC_ROOT}}
 
-if [ x"${JUPYTER_HUB_SINGLE_USER}" != x"" ]; then
+if [ x"${JUPYTER_SERVICE_TYPE}" == x"jupyterhub-singleuser" ]; then
     exec jupyterhub-singleuser --ip=* --port=8080 \
       --notebook-dir=${JUPYTER_NOTEBOOK_DIR} \
-      --hub-api-url=$JUPYTER_HUB_API_URL \
-      --hub-prefix=$JUPYTER_HUB_PREFIX \
-      --cookie-name=$JUPYTER_COOKIE_NAME \
-      --base-url=$JUPYTER_BASE_URL \
-      --user=$JUPYTER_USER
+      --hub-api-url=${JUPYTERHUB_API_URL} \
+      --hub-prefix=${JUPYTERHUB_SERVICE_PREFIX} \
+      --cookie-name=${JUPYTERHUB_SERVICE_NAME} \
+      --base-url=${JUPYTER_NOTEBOOK_PREFIX} \
+      --user=${JUPYTER_NOTEBOOK_USER}
 fi
 
 exec jupyter notebook --no-browser --ip=* --port=8080 \
