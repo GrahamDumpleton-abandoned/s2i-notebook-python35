@@ -2,6 +2,8 @@
 
 set -eo pipefail
 
+set -x
+
 # Create a profile for 'notebook'. Add code for setting password for
 # the notebook from an environment variable.
 
@@ -120,9 +122,26 @@ if [ x"${JUPYTER_NOTEBOOK_EXTENSIONS}" != x"" ]; then
     done
 fi
 
-# Start the Jupyter notebook instance.
+# Copy files into volume if specified and change notebook directory.
 
 JUPYTER_NOTEBOOK_DIR=${JUPYTER_NOTEBOOK_DIR:-${WARPDRIVE_SRC_ROOT}}
+
+if [ x"${JUPYTER_VOLUME_ROOTDIR}" != x"" ]; then
+    JUPYTER_VOLUME_WORKSPACE=${JUPYTER_VOLUME_WORKSPACE:-jupyter}
+
+    WORKDIR=${JUPYTER_VOLUME_ROOTDIR}/${JUPYTER_VOLUME_WORKSPACE}
+
+    if [ ! -d ${WORKDIR} ]; then
+        mkdir -p ${WORKDIR}
+        cp -rp ${JUPYTER_NOTEBOOK_DIR}/. ${WORKDIR}
+    fi
+
+    JUPYTER_NOTEBOOK_DIR=${WORKDIR}
+fi
+
+# Start the Jupyter notebook instance.
+
+cd ${JUPYTER_NOTEBOOK_DIR}
 
 if [ x"${JUPYTER_SERVICE_TYPE}" == x"jupyterhub-singleuser" ]; then
     exec jupyterhub-singleuser --ip=* --port=8080 \
