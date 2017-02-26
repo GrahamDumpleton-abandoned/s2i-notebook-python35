@@ -36,7 +36,8 @@ USER 1001
 # Install packages required for Jupyter notebook and ipyparallel.
 
 RUN warpdrive build && \
-    rm ${WARPDRIVE_SRC_ROOT}/requirements.txt
+    rm ${WARPDRIVE_SRC_ROOT}/requirements.txt && \
+    chmod -Rf g+w ${WARPDRIVE_APP_ROOT} || true
 
 # Expose ports needed when running a parallel compute cluster using the
 # ipyparallel module.
