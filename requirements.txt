@@ -1,4 +1,4 @@
 jupyter
 jupyterhub
-ipython[notebook]
+ipython[notebook]<6.0.0
 ipyparallel
